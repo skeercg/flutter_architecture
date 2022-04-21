@@ -1,7 +1,21 @@
-import 'package:data/data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_architecture/main.config.dart';
+import 'package:flutter_architecture/presentation/cubits/users_cubit.dart';
+import 'package:flutter_architecture/presentation/pages/profile_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+
+final GetIt getIt = GetIt.instance;
+
+@InjectableInit()
+void configureDependencies() => $initGetIt(getIt);
 
 void main() {
+  configureDependencies();
+
+  const foldersToAnalyze = ['lib'];
+
   runApp(const MyApp());
 }
 
@@ -15,27 +29,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Architecture', name: 'Alikhan',),
+      home: BlocProvider<ProfileCubit>(
+        create: (_) => getIt<ProfileCubit>(),
+        child: ProfilePage(),
+      ),
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title, required this.name}) : super(key: key);
-
-  final String title;
-  final String name;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Center(
-        child: Text(call(name)),
-      ),
-     );
   }
 }
